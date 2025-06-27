@@ -78,6 +78,6 @@ uritemplate==4.1.1
 urllib3==2.1.0
 Werkzeug==3.0.1
 wsproto==1.2.0
-yarl==1.9.4
+yarl==1.19.0
 python-dotenv==1.1.1
 gunicorn==23.0.0
