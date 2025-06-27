@@ -9,7 +9,7 @@ bs4==0.0.2
 CacheControl==0.14.2
 cachetools==5.5.1
 certifi==2023.11.17
-cffi==1.16.0
+cffi==1.17.1
 chardet==5.2.0
 charset-normalizer==3.3.2
 click==8.1.7
