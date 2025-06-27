@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meta Checker</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='images/Subtract.png') }}" rel="apple-touch-icon"/>
+    <meta property="og:title" content="Check meta data for your website">
+    <meta property="og:description" content="SEO for your website with Meta Checker. Check for all Meta Title, Descriptions, and Images on your sitemap.">
+    <meta property="og:image" content="/static/images/OG-MetaChecker.png">
+    <meta content="SEO for your website with Meta Checker. Check for all Meta Title, Descriptions, and Images on your sitemap." name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100;9..40,400;9..40,700&display=swap" rel="stylesheet">
+        <!-- <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-R0XMT2C7RX');
+        </script> -->
+</head>
+<body>
+    <script>
+        function handleImageError(imgElement) {
+            var textElement = document.createElement('p');
+            textElement.textContent = "Image Not Accessible";
+            imgElement.replaceWith(textElement);
+        }
+    </script>
+    <div class="main">
+        {% include 'components/header.html' %}
+        <div class="hide-content" id="hide-content">
+        <div class="content" id="content">
+            <h1 class="content-text">Check and Update your site’s meta data in seconds with the power of AI</h1>
+        </div>
+        </div>
+        <div class="field" id="field">
+            <form method="POST" action="/" onsubmit="return showLoader()">
+                <div class="input-container" id="input-container">
+                    <div class="input-wrapper">
+                        <input type="text" class="input-field" name="siteurl" id="siteurl" required placeholder="Enter site URL">
+                        <button type="submit" class="Go" id="goButton">    
+                            <span id="goText">GO</span>
+                            <div id="loader" class="loader-inline">
+                                <div class="loader-circle"></div>
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+            
+        </div>
+
+        <div class="error-container" id="error-container">
+            <div class="error-arrow" id="error-arrow"></div>
+            <div class="error-message" id="error-message"></div>
+        </div>
+        <div class="show-container" id="show-container">
+            <div class="siteurl">
+                <h2>{{siteurl}}</h2>
+            </div>
+            <div class="boxes">
+                <div class="stats-box">
+                    <h1 id="total-sites" class="number-data">{{ meta_info | length }}</h1>
+                    <h3>Pages</h3>
+                    <p>Total pages on your sitemap.</p>
+                </div>
+                <div class="stats-box">
+                    <h1 id="missing-data-sites"  class="number-data">{{ missing_data }}</h1>
+                    <h3>Affected Pages</h3>
+                    <p>Pages with missing meta data.</p>
+                </div>
+
+            </div>
+            <div class="ai-divs">
+                <h3>AI Meta Title:</h3>
+                <div id="metaTitleBox"></div>
+                <button onclick="copyToClipboard('metaTitleBox')">Copy</button>
+            </div>
+            <div class="ai-divs">
+                <h3>AI Meta Description:</h3>
+                <div id="metaDescriptionBox"></div>
+                <button onclick="copyToClipboard('metaDescriptionBox')">Copy</button>
+            </div>
+            <div class="ai-divs">
+                <h3>AI SEO Schema:</h3>
+                <pre id="seoSchemaBox"></pre>
+                <button onclick="copyToClipboard('seoSchemaBox')">Copy</button>
+            </div>            
+            <div class="download-csv-container">
+                <form method="POST" action="/download-csv" id="download-csv-form">
+                    <input type="hidden" name="siteurl" value="{{ siteurl }}">
+                    <button type="submit" id="download-csv-button">Download CSV</button>
+                </form>
+            </div>
+        <div class="main-res" id="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="details">Deatils</th>
+                            <th>URL</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if meta_info is iterable and not meta_info is string %}
+
+                            {% for info in meta_info %}
+                                <tr>
+                                    <td>{{ info[0] }}</td>
+                                    <td>
+                                        {% if info[1] == 'N/A' or info[1] == 'Not Found' %}
+                                        <img src="{{ url_for('static', filename='images/red_cross.jpg') }}" alt="Image 1" class="cross-image">
+                                        {% else %}
+                                            {{ info[1] }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if info[2] == 'N/A' %}
+                                        <img src="{{ url_for('static', filename='images/red_cross.jpg') }}" alt="Image 1" class="cross-image">
+                                        {% else %}
+                                            {{ info[2] }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if info[3] == 'N/A' %}
+                                        <img src="{{ url_for('static', filename='images/red_cross.jpg') }}" alt="Image 1" class="cross-image" >
+                                        {% else %}
+                                            <img src="{{ info[3] | attach_base_url(siteurl)}}" alt="Image {{ loop.index }}" onerror="handleImageError(this)">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button onclick="handleAiCall('{{ info[0] }}')">Genrate Using AI</button>
+                                    </td>                                    
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                    </tbody>
+                </table>
+        </div>
+    </div>
+
+    <div class="footer" id="footer">
+        <!-- <div class="copyright">
+            <p>Copyright © 2023 <a href="https://www.lilbigthings.com" target="_blank">Lil Big Things</a></p>
+        </div>
+        <div class="all-rights">
+            <p>All Rights Reserved</p>
+        </div> -->
+    </div>
+    
+    </div>
+    
+
+    <script>
+        var metaInfoData = JSON.parse('{{ check | tojson | safe }}');
+        if(metaInfoData != '' && metaInfoData == 'List'){
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("goText").style.display = "inline";
+            document.getElementById("hide-content").style.display = "none";
+            // document.getElementById("hide-hunt").style.display = "none";
+            document.getElementById("show-container").style.display = "block";
+            document.getElementById("field").style.paddingTop= "20px"
+            const footer = document.getElementById("footer")
+            footer.style.position = "relative"
+            var crossImages = document.querySelectorAll("img");
+            crossImages.forEach(function (crossImage) {
+                var tdElement = crossImage.closest("td");
+                if (tdElement) {
+                    tdElement.style.verticalAlign = "middle";
+                }
+                });
+            }   
+        else if(metaInfoData != '' && metaInfoData == 'String'){
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("goText").style.display = "inline";
+            var errorMessage = JSON.parse('{{ meta_info | tojson | safe }}');
+            console.log(errorMessage)
+            showError(errorMessage)
+        }
+
+        function copyToClipboard(elementId) {
+            var el = document.getElementById(elementId);
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert('Copied to clipboard!');
+        }
+
+        function showLoader() {
+            var urlField = document.getElementById("siteurl");
+            var urlValue = urlField.value.trim();   
+            if (!urlValue.startsWith("https://")) {
+                urlField.value = "https://" + urlValue;
+            }
+
+            document.getElementById("goText").style.display = "none";
+            document.getElementById("loader").style.display = "inline-block";
+            document.getElementById("error-message").innerText = "";
+            urlField.style.borderColor = "#ccc";
+            return true;
+        }
+        function showLargeSitemapMessage() {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("large-sitemap-message").style.display = "block";
+            document.getElementById("field").style.paddingTop = "20px";
+            const footer = document.getElementById("footer");
+            footer.style.marginTop = "20px";
+            footer.style.marginBottom = "40px";
+        }
+
+        function handleAiCall(pageUrl) {
+            document.getElementById('metaTitleBox').innerText = "please wait getting title...";
+            document.getElementById('metaDescriptionBox').innerText = "please wait getting description...";
+            document.getElementById('seoSchemaBox').innerText = "please wait getting schema..."
+            fetch('/ai-call', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ pageUrl: pageUrl })
+            })
+            .then(response => {
+                console.log(response)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.success && data.parsed_results && data.parsed_results[pageUrl]) {
+                    const result = data.parsed_results[pageUrl];
+                    const metaTitle = result.metaTitle;
+                    const metaDescription = result.metaDescription;
+                    const seoSchema = result.seoSchema;
+
+                    document.getElementById('metaTitleBox').innerText = metaTitle;
+                    document.getElementById('metaDescriptionBox').innerText = metaDescription;
+                    document.getElementById('seoSchemaBox').innerText = JSON.stringify(seoSchema, null, 2);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+
+        function showError(message) {
+            var textField = document.getElementById("siteurl");
+            textField.style.border = "1px solid #AD0000";
+            var errorMessageElement = document.getElementById("error-message");
+            var errorArrow = document.getElementById("error-arrow");
+            errorMessageElement.innerHTML = `<span class="error-msg">Error</span><br> ${message}`;
+            errorMessageElement.parentElement.classList.add("show-error");
+            errorArrow.style.display = "block";
+        }
+        function clearErrors() {
+            var textField = document.getElementById("siteurl");
+            textField.style.border = "1px solid #ccc";
+            var errorMessageElement = document.getElementById("error-message");
+            var errorArrow = document.getElementById("error-arrow");
+            errorMessageElement.innerHTML = "";
+            errorMessageElement.parentElement.classList.remove("show-error");
+            errorArrow.style.display = "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var urlField = document.getElementById("siteurl");
+            urlField.addEventListener("input", clearErrors);
+        });
+    </script>
+</body>
+</html>

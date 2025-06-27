@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sitemap Meta Extractor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='header.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div id="header-link" class="header-link" onclick="navigateToHome()">
+            <img src="{{ url_for('static', filename='images/Subtract.svg') }}" alt="logo" class="logo-image">
+            <div class="header-text">AI Meta Genrator</div>
+        </div>
+    </header>
+
+    <script>
+        function navigateToHome() {
+            window.location.href = "/";
+        }
+
+    </script>
+</body>
+</html>

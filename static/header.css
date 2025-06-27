@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3px;
+}
+
+.header-link {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo-image {
+    margin-top: 12px;
+    width: 58px;
+    height: 58px;
+    cursor: pointer;
+}
+
+.header-text {
+    margin-top: 12px;
+    margin-left: 10px;
+    color: #232323;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: DM Sans;
+    font-size: 31px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 66px;
+    cursor: pointer;
+}
