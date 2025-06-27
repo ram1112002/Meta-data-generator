@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+
+# Env / Secrets
+.env
+.env.*
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv/
+
+# Flask
+instance/
+*.db
+*.sqlite3
+
+# VSCode / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS / Misc
+.DS_Store
+Thumbs.db
+*.log
+
+# Byte-compiled / cache
+.cache/
+*.egg-info/
+.eggs/
+*.bak
+
+# Testing
+coverage.xml
+htmlcov/
+.tox/
+.pytest_cache/
+
+# Build
+dist/
+build/
+*.egg
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Node.js (if using for frontend)
+node_modules/

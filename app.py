@@ -12,15 +12,17 @@ import datetime
 import random
 import os
 import chardet
+from dotenv import load_dotenv
 
 import ssl
 ssl_context = ssl.create_default_context()
 ssl_context.check_hostname = False
 ssl_context.verify_mode = ssl.CERT_NONE
 
+load_dotenv()
 app = Flask(__name__)
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route('/check-meta-data', methods=['POST'])
 async def check_meta_data():
